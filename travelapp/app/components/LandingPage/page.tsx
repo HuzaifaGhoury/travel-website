@@ -4,7 +4,7 @@ import Image from 'next/image'
 import bgimgtwo from '../../../public/Images/bgimg.jpg'
 // import travellogo from '../../../public/Images/travellogo.svg'
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
-import { Button } from '@mui/material';
+// import { Button } from '@mui/material';
 
 const page = () => {
  
@@ -24,11 +24,19 @@ const page = () => {
   Sign Up
 </button>
 
-
      
       </div>
     </div>
+<div className=' relative text-6xl mt-32 pl-20  w-2/5  ml-6 font-bold  text-white'>
+  <p>Let's Explore ,</p>
+  <p className=' mt-4'>The world</p>
 
+</div>
+<div className='relative  pl-20 ml-20'>
+<button className=' text-white rounded mt-6 border border-white-300 p-2 w-32 font-bold  hover:bg-slate-100'>
+  Play video
+</button>
+</div>
       </div>
       </div>
   )

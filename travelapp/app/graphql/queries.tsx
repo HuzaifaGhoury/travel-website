@@ -14,6 +14,7 @@ query experienceFilter($search: String) {
       price
     }
     
+    
   }
 }
 `;
