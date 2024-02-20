@@ -1,12 +1,9 @@
 "use client";
-
 import { ReactNode } from "react";
 import "./globals.css";
 import { ApolloProvider } from "@apollo/client";
 import  getApolloClient  from "../app/lib/client";
-
-
-import Page from "./page";
+// import Page from "./page";
 import { AppProvider } from "./components/context";
 
 interface RootLayoutProps {
@@ -16,17 +13,19 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   const client = getApolloClient();
   return (
-    <html lang="en">
+    <html lang="en"> 
       
-      <body>
+      <body> 
       
         <ApolloProvider client={client}>
-          <AppProvider>
-          <Page/>
+          <AppProvider> 
+          {/* <Page/> */}
           {children}
           </AppProvider>
-        </ApolloProvider>
+          </ApolloProvider>
+
       </body>
-    </html>
-  );
-}
+    </html>  
+
+)
+};

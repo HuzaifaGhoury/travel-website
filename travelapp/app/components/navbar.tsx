@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Commonbtn from './commonbtn';
+import CommonBtn from './commonbtn';
 
 const Navbar = () => {
   const router = useRouter();
@@ -39,7 +39,10 @@ const Navbar = () => {
           <li className="mx-2">Packages</li>
           <li className="mx-2">Contact</li>
         </ul>
-        <Commonbtn buttonText="Sign up"/>
+        <CommonBtn buttonText="Sign up" onClick={() => {}} />
+
+
+      
       </div>
     </div>
   );

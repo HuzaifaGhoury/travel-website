@@ -1,22 +1,43 @@
-import React, { ChangeEvent, MouseEvent } from 'react';
+  "use client"
+  import React, { ChangeEvent, MouseEvent, useState, useEffect } from 'react';
 import CommonBtn from './commonbtn';
 import { useAppContext } from '../components/context';
 
-const MainContent: React.FC = () => {
-const { searchTerm, setSearchTerm } = useAppContext();
+interface Experience {
+  id: string;
+  name: string;
+}
 
-const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-const newValue = e.target.value;
+  const MainContent: React.FC = () => {
+  
+  const { searchTerm, setSearchTerm, experiences, setExperiences } = useAppContext();
+  console.log(experiences , 'searchexperiencestate')
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
     setSearchTerm(newValue);
     console.log('Input value:', newValue);
-};
+  };
 
-const handleSearch = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    console.log('Performing search with:', searchTerm);
-};
+  
+  
 
-return (
+
+  const handleSearch = (e: MouseEvent<HTMLButtonElement>) => {
+  if (searchTerm) {
+      console.log(searchTerm, 'search term');
+      console.log(experiences, 'original experiences');
+  
+      const updatedFilteredExperiences = experiences.filter((experience: Experience) =>
+        experience.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+ 
+      console.log(updatedFilteredExperiences, 'filtered experiences');
+      setExperiences(updatedFilteredExperiences);
+    }
+  };
+  
+    return (
     <div className="relative bg-transparent-500 p-4 text-center mt-32">
       <h1 className="text-6xl font-bold">Enjoy Your Vacation With Us</h1>
       <p className="mt-10 text-2xl">
@@ -37,4 +58,4 @@ return (
   );
 };
 
-export default MainContent; 
+export default MainContent;
