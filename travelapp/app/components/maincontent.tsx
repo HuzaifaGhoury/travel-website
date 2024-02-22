@@ -59,6 +59,8 @@
 
 // export default MainContent;
 
+// SearchInput.ts
+
 import React from 'react'
 
 const maincontent = () => {

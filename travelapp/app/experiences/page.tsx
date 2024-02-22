@@ -9,6 +9,11 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import StarRating from '../components/starrating'
 // import { useAppContext } from '../components/context';
 import CommonBtn from '../components/commonbtn';
+import roadimg from '../../public/Images/roadimg.jpg'
+import Image from 'next/image';
+import Select from 'react-select';
+
+
 
 interface Experience {
   id: string;
@@ -23,6 +28,7 @@ interface Experience {
    
 const Page: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [initialExperiences, setInitialExperiences] = useState<Experience[]>([]);
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [fetchExperienceFilter, { data }] = useLazyQuery(GetExperienceFilter);
 
@@ -48,7 +54,12 @@ const Page: React.FC = () => {
     fetchData();
   }, [searchTerm]);
 
+  useEffect(() => {
+    setInitialExperiences(experiences);
+  }, [experiences]);
+
   const [likedImages, setLikedImages] = useState<string[]>([]);
+
   const handleLike = (experienceId: string) => {
     if (likedImages.includes(experienceId)) {
       setLikedImages((prevLikedImages) => prevLikedImages.filter((id) => id !== experienceId));
@@ -67,52 +78,65 @@ const Page: React.FC = () => {
     return minimumPrice;
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setSearchTerm(newValue);
-    console.log('Input value:', newValue);
+  const handleChange = (inputValue: string) => {
+    setSearchTerm(inputValue);
   };
 
-  const handleSearch = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleSearch = () => {
     if (searchTerm) {
-      console.log(searchTerm, 'search term');
-      console.log(experiences, 'original experiences');
-
-      const updatedFilteredExperiences = experiences.filter((experience: Experience) =>
+      const updatedFilteredExperiences = initialExperiences.filter((experience: Experience) =>
         experience.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
 
-      console.log(updatedFilteredExperiences, 'filtered experiences');
       setExperiences(updatedFilteredExperiences);
     }
   };
 
+  const handleReset = () => {
+    setSearchTerm('');
+    setExperiences(initialExperiences);
+  };
+
+  const options = experiences.map((experience) => ({
+    value: experience.id,
+    label: experience.name,
+  }));
+
   return (
     <Layout>
-      <div className="flex gap-10">
-        
-        <div>
+      <div>
+        <div className='relative w-full h-screen'>
+          <Image src={roadimg} alt='bg-image' className='w-full h-full object-cover' />
+          <div className='absolute inset-0 flex flex-col items-center justify-center'>
+            <h1 className='text-6xl font-bold'>Enjoy Your Vacation With Us</h1>
+            <p className='mt-10 text-2xl'>Tempor erat elitr rebum at clita diam amet diam et eos erat ipsum lorem sit</p>
+            <div className='mt-8 flex items-center justify-center relative'>
+              <Select
+                className='w-96'
+                options={options}
+                placeholder='Search...'
+                isSearchable
+                onChange={(selectedOption) => {
+                  // Handle selected option
+                  console.log(selectedOption);
+                }}
+                onInputChange={handleChange}
+              />
+              {searchTerm && (
+                <CommonBtn buttonText='Clear' onClick={handleReset} />
+              )}
+              <CommonBtn buttonText='Search' onClick={handleSearch} />
+            </div>
+
+  </div>
+</div>
+
+        <div className="flex gap-6 ">
+          <div>
           <Filter />
-        </div>
-        <div className="relative bg-transparent-500 p-4 text-center mt-32">
-        <h1 className="text-6xl font-bold">Enjoy Your Vacation With Us</h1>
-        <p className="mt-10 text-2xl">
-          Tempor erat elitr rebum at clita diam amet diam et eos erat ipsum lorem sit
-        </p>
-        <div className="mt-8 flex items-center justify-center">
-          <input
-            className="w-96 h-12 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-            type="text"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={handleChange}
-          />
-          <CommonBtn buttonText="Search" onClick={handleSearch} />
-        </div>
-      </div>
-        <div>
-          <h1 className="text-xl ml-2">Experiences</h1>
-          <div className="flex flex-col gap-4 mt-3">
+
+          </div>
+          <div className=' flex gap-7 flex-col pb-3 pt-3'>
             {experiences.map((experience: Experience) => (
               <div className="flex" key={experience.id}>
                 <div className="relative border border-solid border-gray-300 rounded-xl w-60 h-52">
@@ -177,4 +201,4 @@ const Page: React.FC = () => {
   );
 };
 
-export default Page;
+export default Page; 

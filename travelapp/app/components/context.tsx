@@ -48,6 +48,10 @@
 
 //   return context as AppContextState;
 // };
+
+
+// SearchContext.tsx
+
 import React from 'react'
 
 const context = () => {

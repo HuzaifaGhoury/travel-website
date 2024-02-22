@@ -14,7 +14,7 @@ const page = () => {
         <Image src={bgimgtwo} alt="background image" 
         layout="fill" objectFit="cover"/>
     <div className='relative flex    w-10/12  ml-20 justify-between'>
-      <div className='flex  '>
+      <div className='flex'>
 
     <TravelExploreIcon className='  mt-3 ml-4 text-5xl text-gray-700 text-opacity-75  '/>
     <h2 className=' text-5xl mt-3 text-gray-700 text-opacity-75 font-mono'>Traveling</h2>
