@@ -65,7 +65,10 @@ import React from 'react'
 
 const maincontent = () => {
   return (
-    <div>maincontent</div>
+    <div>
+          {/* <p className='font-bold text-white text-8xl relative' >Its's Time To Travel.</p> */}
+
+    </div>
   )
 }
 

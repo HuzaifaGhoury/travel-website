@@ -3,7 +3,6 @@ import { ReactNode } from "react";
 import "./globals.css";
 import { ApolloProvider } from "@apollo/client";
 import  getApolloClient  from "../app/lib/client";
-import Page from "./page";
 // import { SearchProvider } from "./components/context";
 
 interface RootLayoutProps {
@@ -18,10 +17,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body> 
       
         <ApolloProvider client={client}>
-          {/* <SearchProvider>  */}
-          {/* <Page/> */}
+         
           {children}
-          {/* </SearchProvider> */}
+        
           </ApolloProvider>
  
       </body>

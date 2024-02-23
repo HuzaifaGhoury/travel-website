@@ -11,8 +11,9 @@ const Navbar = () => {
     router.push('/experiences');
   };
 
-  return (
-    <div className="relative bg-transparent-500 p-4">
+  return ( 
+<div>
+    <div className="relative border border-black  w-8/12 ">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <svg
@@ -34,16 +35,17 @@ const Navbar = () => {
             onClick={navigateToExperiences}
           >
             Experiences
-          </li>
+          </li>  
           <li className="mx-2">About</li>
           <li className="mx-2">Packages</li>
           <li className="mx-2">Contact</li>
         </ul>
-        <CommonBtn buttonText="Sign up" onClick={() => {}} />
+        <CommonBtn buttonText="Log out" onClick={() => {}} />
 
 
       
       </div>
+    </div>
     </div>
   );
 };

@@ -38,6 +38,7 @@ const Page: React.FC = () => {
         const result = await fetchExperienceFilter({
           variables: {
             search: searchTerm,
+            
           },
         });
 
@@ -97,6 +98,29 @@ const Page: React.FC = () => {
     setExperiences(initialExperiences);
   };
 
+  const [selectedDuration, setSelectedDuration] = useState<string>('');
+
+  const handleFilterChange = (duration: string) => {
+    setSelectedDuration(duration);
+    filterExperiencesByDuration(duration);
+  };
+
+  const filterExperiencesByDuration = (duration: string) => {
+    if (!duration) {
+      setExperiences(initialExperiences);
+      return;
+    }
+
+    const [min, max] = duration.split('-').map(Number);
+    const filteredExperiences = initialExperiences.filter((experience) => {
+      const experienceDuration = parseInt(experience.duration, 10);
+      return experienceDuration >= min && experienceDuration <= max;
+    });
+
+    setExperiences(filteredExperiences);
+  };
+
+
   const options = experiences.map((experience) => ({
     value: experience.id,
     label: experience.name,
@@ -108,7 +132,7 @@ const Page: React.FC = () => {
         <div className='relative w-full h-screen'>
           <Image src={roadimg} alt='bg-image' className='w-full h-full object-cover' />
           <div className='absolute inset-0 flex flex-col items-center justify-center'>
-            <h1 className='text-6xl font-bold'>Enjoy Your Vacation With Us</h1>
+            <h1 className='text-6xl font-bold'>Trust Our Experineces</h1>
             <p className='mt-10 text-2xl'>Tempor erat elitr rebum at clita diam amet diam et eos erat ipsum lorem sit</p>
             <div className='mt-8 flex items-center justify-center relative'>
               <Select
@@ -133,7 +157,7 @@ const Page: React.FC = () => {
 
         <div className="flex gap-6 ">
           <div>
-          <Filter />
+          <Filter handleFilterChange={handleFilterChange} />
 
           </div>
           <div className=' flex gap-7 flex-col pb-3 pt-3'>
@@ -160,7 +184,7 @@ const Page: React.FC = () => {
                     </div>
                     <div>
                       {experience.experienceDate.map((date, index) => (
-                        <p key={index}>Price: ${getMinimumPrice(experience.experienceDate)}</p>
+                        <p>Price: ${getMinimumPrice(experience.experienceDate)}</p>
                       ))}
                     </div>
                   </div>

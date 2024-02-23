@@ -7,7 +7,7 @@ interface CommonBtnProps {
 
 const CommonBtn: React.FC<CommonBtnProps> = ({ buttonText, onClick }) => {
   return (
-    <button className="your-button-styles" onClick={onClick}>
+    <button className=' text-white'  onClick={onClick}>
       {buttonText}
     </button>
   );
