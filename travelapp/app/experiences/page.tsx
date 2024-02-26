@@ -3,7 +3,7 @@ import React, { useState, useEffect , ChangeEvent, MouseEvent } from 'react';
 import Layout from '../layout';
 import { useLazyQuery } from '@apollo/client';
 import { GetExperienceFilter } from '../graphql/queries';
-import Filter from '../components/filtersidebar';
+import FilterSidebar from '../components/filtersidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import StarRating from '../components/starrating'
@@ -31,6 +31,9 @@ const Page: React.FC = () => {
   const [initialExperiences, setInitialExperiences] = useState<Experience[]>([]);
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [fetchExperienceFilter, { data }] = useLazyQuery(GetExperienceFilter);
+  const [selectedDuration, setSelectedDuration] = useState<string>('');
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,11 +41,15 @@ const Page: React.FC = () => {
         const result = await fetchExperienceFilter({
           variables: {
             search: searchTerm,
-            
+            durations: selectedDuration !== '' ? parseInt(selectedDuration) : null,
           },
         });
+        console.log(result , 'result');
 
-        setExperiences(result?.data?.experienceFilter || []);
+       
+        if (result?.data?.experienceFilter) {
+          setExperiences(result.data.experienceFilter);
+        }
       } catch (error) {
         if (error instanceof Error) {
           console.error(`Error fetching data: ${error.message}`);
@@ -51,9 +58,10 @@ const Page: React.FC = () => {
         }
       }
     };
-
+  
     fetchData();
-  }, [searchTerm]);
+  }, [searchTerm, selectedDuration]);
+  
 
   useEffect(() => {
     setInitialExperiences(experiences);
@@ -98,7 +106,6 @@ const Page: React.FC = () => {
     setExperiences(initialExperiences);
   };
 
-  const [selectedDuration, setSelectedDuration] = useState<string>('');
 
   const handleFilterChange = (duration: string) => {
     setSelectedDuration(duration);
@@ -141,7 +148,6 @@ const Page: React.FC = () => {
                 placeholder='Search...'
                 isSearchable
                 onChange={(selectedOption) => {
-                  // Handle selected option
                   console.log(selectedOption);
                 }}
                 onInputChange={handleChange}
@@ -157,7 +163,7 @@ const Page: React.FC = () => {
 
         <div className="flex gap-6 ">
           <div>
-          <Filter handleFilterChange={handleFilterChange} />
+          <FilterSidebar handleFilterChange={handleFilterChange} selectedDuration={selectedDuration} />
 
           </div>
           <div className=' flex gap-7 flex-col pb-3 pt-3'>
