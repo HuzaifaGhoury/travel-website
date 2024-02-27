@@ -1,4 +1,3 @@
-
 "use client"
 import React, { useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,7 +7,7 @@ import { SelectChangeEvent } from '@mui/material/Select';
 interface FilterSidebarProps {
   handleFilterChange: (duration: string) => void;
   selectedDuration: string; 
-}
+}  
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({ handleFilterChange, selectedDuration }) => {
   const handleDurationChange = (event: SelectChangeEvent) => {
@@ -37,13 +36,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ handleFilterChange, selec
             <MenuItem value="11-20">11 - 20 Days</MenuItem>
             <MenuItem value="21-31">21 - 31 Days</MenuItem>
           </Select>
-        </div>
-       
-      </div>
-    </div>
-  );
-}
-
-
+       </div>
+       </div> 
+       </div>
+)}
 
 export default FilterSidebar;

@@ -7,12 +7,10 @@ import FilterSidebar from '../components/filtersidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import StarRating from '../components/starrating'
-// import { useAppContext } from '../components/context';
 import CommonBtn from '../components/commonbtn';
 import roadimg from '../../public/Images/roadimg.jpg'
 import Image from 'next/image';
 import Select from 'react-select';
-
 
 
 interface Experience {
@@ -35,17 +33,17 @@ const Page: React.FC = () => {
 
 
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchData = async () => {
       try {
         const result = await fetchExperienceFilter({
           variables: {
             search: searchTerm,
-            durations: selectedDuration !== '' ? parseInt(selectedDuration) : null,
+            durations: selectedDuration !== '' ? [parseInt(selectedDuration)] : null,
           },
         });
-        console.log(result , 'result');
-
+        
+        console.log(result , 'result')
        
         if (result?.data?.experienceFilter) {
           setExperiences(result.data.experienceFilter);
@@ -114,7 +112,7 @@ const Page: React.FC = () => {
 
   const filterExperiencesByDuration = (duration: string) => {
     if (!duration) {
-      setExperiences(initialExperiences);
+      setExperiences(initialExperiences); 
       return;
     }
 
@@ -133,7 +131,7 @@ const Page: React.FC = () => {
     label: experience.name,
   }));
 
-  return (
+  return ( 
     <Layout>
       <div>
         <div className='relative w-full h-screen'>
@@ -158,7 +156,7 @@ const Page: React.FC = () => {
               <CommonBtn buttonText='Search' onClick={handleSearch} />
             </div>
 
-  </div>
+</div>
 </div>
 
         <div className="flex gap-6 ">
