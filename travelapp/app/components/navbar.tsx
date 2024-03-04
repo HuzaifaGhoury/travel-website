@@ -14,8 +14,8 @@ const router = useRouter();
   return (
 
 <div className=' flex justify-center align-middle  '>
-    <div className="relative   w-8/12   h-14 top-7  rounded-3xl bg-white text-stone-950">
-      <div className="flex items-center  gap-40 mt-3 ml-6">
+    <div className=" relative  w-8/12   h-14 top-7  rounded-3xl bg-white text-stone-950 ">
+      <div className="flex items-center  gap-40 mt-3 ml-6 ">
         <div className="flex items-center">
           <svg
             className="w-6 h-6 "

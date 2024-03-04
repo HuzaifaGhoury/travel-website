@@ -1,16 +1,18 @@
 "use client"
-import React, { useState, useEffect , ChangeEvent, MouseEvent } from 'react';
+import React, { useState, useEffect  } from 'react';
 import Layout from '../layout';
 import { useLazyQuery } from '@apollo/client';
 import { GetExperienceFilter } from '../graphql/queries';
 import FilterSidebar from '../components/filtersidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart , faTimes } from '@fortawesome/free-solid-svg-icons';
 import StarRating from '../components/starrating'
 import CommonBtn from '../components/commonbtn';
 import roadimg from '../../public/Images/roadimg.jpg'
 import Image from 'next/image';
 import Select from 'react-select';
+
+
 
 
 interface Experience {
@@ -99,10 +101,11 @@ const Page: React.FC = () => {
     }
   };
 
-  const handleReset = () => {
+  const handleClearSearch = () => {
     setSearchTerm('');
     setExperiences(initialExperiences);
   };
+  
 
 
   const handleFilterChange = (duration: string) => {
@@ -140,21 +143,34 @@ const Page: React.FC = () => {
             <h1 className='text-6xl font-bold'>Trust Our Experineces</h1>
             <p className='mt-10 text-2xl'>Tempor erat elitr rebum at clita diam amet diam et eos erat ipsum lorem sit</p>
             <div className='mt-8 flex items-center justify-center relative'>
-              <Select
-                className='w-96'
-                options={options}
-                placeholder='Search...'
-                isSearchable
-                onChange={(selectedOption) => {
-                  console.log(selectedOption);
-                }}
-                onInputChange={handleChange}
-              />
-              {searchTerm && (
-                <CommonBtn buttonText='Clear' onClick={handleReset} />
-              )}
-              <CommonBtn buttonText='Search' onClick={handleSearch} />
-            </div>
+  <Select
+    className='w-96'
+    options={options}
+    placeholder='Search...'
+    isSearchable
+    onChange={(selectedOption) => {
+      if (selectedOption) {
+        const selectedExperience = initialExperiences.find(
+          (experience) => experience.id === selectedOption.value
+        );
+
+        if (selectedExperience) {
+          setExperiences([selectedExperience]);
+        }
+      }
+    }}
+    onInputChange={handleChange}
+  />
+  {searchTerm && (
+    <FontAwesomeIcon
+      icon={faTimes}
+      className='absolute top-2  text-xl cursor-pointer text-gray-500  ml-'
+      onClick={handleClearSearch}
+    />
+  )}
+  <CommonBtn buttonText='Search' onClick={handleSearch} />
+</div>
+
 
 </div>
 </div>

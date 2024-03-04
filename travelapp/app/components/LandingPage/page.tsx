@@ -28,7 +28,7 @@ const Page = () => {
 
   const handleSignUp = () => {
     // Navigate to the home page when Sign Up button is clicked
-    router.push('/home');
+    router.push('/signup');
   };
 
   return (

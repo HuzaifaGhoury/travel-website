@@ -1,15 +1,27 @@
+import React from 'react';
 
-import React from 'react'
+const MainContent: React.FC = () => {
+  
+  const headingStyle: React.CSSProperties = {
+    fontFamily: 'cursive',
+    color: '#fff', 
+    fontSize: '4rem', 
+    fontWeight: 'bold',
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)', 
+    textAlign:'center',
+    // textDecoration: 'underline'
+  };
 
-const maincontent = () => {
-  return (
-    <div className=' border border-red-50 w-36 h-44 relative  mt-28 ml-28'>
-    <div ></div>
-   
-    {/* <p className='font-bold text-white text-2xl relative' >Its's Time To Travel.</p> */}
-
+  return (    
+    
+    <div className='h-44 relative  mt-32  ml-56  w-5/12'>
+     
+      <p style={headingStyle}>Travel far enough, you meet yourself.</p>
+    
     </div>
+   
+    
   )
-}
+};
 
-export default maincontent;
+export default MainContent;
