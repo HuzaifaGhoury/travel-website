@@ -4,18 +4,13 @@ import Image from 'next/image';
 import bgimgtwo from '../../../public/Images/bgimg.jpg';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import VideoModal from './videomodal';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow'; // Import PlayArrowIcon
-import paris from '../../../public/Images/paris.png'
-import mountain from '../../../public/Images/mountain.jpg'
-import country from '../../../public/Images/bg-country.jpg'
-import { useRouter } from 'next/navigation'; // Import the useRouter hook
-
-
+import PlayArrowIcon from '@mui/icons-material/PlayArrow'; 
+import { useRouter } from 'next/navigation';
 
 
 const Page = () => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const router = useRouter(); // Initialize the router
+  const router = useRouter(); 
 
 
   const handleOpenModal = () => {
@@ -27,7 +22,6 @@ const Page = () => {
   };
 
   const handleSignUp = () => {
-    // Navigate to the home page when Sign Up button is clicked
     router.push('/signup');
   };
 

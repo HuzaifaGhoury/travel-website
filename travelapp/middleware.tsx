@@ -1,11 +1,14 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
- 
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+const isAuthenticated = false;
+
 export function middleware(request: NextRequest) {
-    console.log("middleware connected")
-  return NextResponse.redirect(new URL('/', request.url))
+  if (!isAuthenticated) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+  return NextResponse.next();
 }
- 
 export const config = {
-  matcher: ['/experiences', '/about' , '/review' , '/home'],
+  matcher: []
 };

@@ -7,12 +7,10 @@ import FilterSidebar from '../components/filtersidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart , faTimes } from '@fortawesome/free-solid-svg-icons';
 import StarRating from '../components/starrating'
-import CommonBtn from '../components/commonbtn';
+// import CommonBtn from '../components/commonbtn';
 import roadimg from '../../public/Images/roadimg.jpg'
 import Image from 'next/image';
 import Select from 'react-select';
-
-
 
 
 interface Experience {
@@ -32,40 +30,46 @@ const Page: React.FC = () => {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [fetchExperienceFilter, { data }] = useLazyQuery(GetExperienceFilter);
   const [selectedDuration, setSelectedDuration] = useState<string>('');
+  const [shouldFetchData, setShouldFetchData] = useState<boolean>(true); // Set to true initially
 
+  const fetchData = async () => {
+    if (!shouldFetchData) return; // Exit if shouldFetchData is false
 
+    try {
+      const result = await fetchExperienceFilter({
+        variables: {
+          search: searchTerm,
+          durations: selectedDuration !== '' ? [parseInt(selectedDuration)] : null,
+        },
+      });
 
-  useEffect(() => { 
-    const fetchData = async () => {
-      try {
-        const result = await fetchExperienceFilter({
-          variables: {
-            search: searchTerm,
-            durations: selectedDuration !== '' ? [parseInt(selectedDuration)] : null,
-          },
-        });
-        
-        console.log(result , 'result')
-       
-        if (result?.data?.experienceFilter) {
-          setExperiences(result.data.experienceFilter);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error(`Error fetching data: ${error.message}`);
-        } else {
-          console.error('Unknown error fetching data');
-        }
+      console.log(result, 'result');
+
+      if (result?.data?.experienceFilter) {
+        setExperiences(result.data.experienceFilter);
       }
-    };
-  
-    fetchData();
-  }, [searchTerm, selectedDuration]);
-  
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(`Error fetching data: ${error.message}`);
+      } else {
+        console.error('Unknown error fetching data');
+      }
+    } finally {
+      if (shouldFetchData) {
+        setShouldFetchData(false); // Reset the flag after the initial fetch
+      }
+    }
+  };
 
   useEffect(() => {
-    setInitialExperiences(experiences);
-  }, [experiences]);
+    fetchData();
+  }, [shouldFetchData]); // Fetch data whenever shouldFetchData changes
+
+  const handleSearch = () => {
+    console.log('Button clicked!');
+    setShouldFetchData(true); // Trigger search when button is clicked
+  };
+
 
   const [likedImages, setLikedImages] = useState<string[]>([]);
 
@@ -88,19 +92,16 @@ const Page: React.FC = () => {
   };
 
   const handleChange = (inputValue: string) => {
+    // console.log('Button  !');
+
     setSearchTerm(inputValue);
   };
-
-  const handleSearch = () => {
-    if (searchTerm) {
-      const updatedFilteredExperiences = initialExperiences.filter((experience: Experience) =>
-        experience.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-      setExperiences(updatedFilteredExperiences);
-    }
-  };
-
+  
+  // const handleSearch = () => {
+  //   console.log('Button clicked!');
+  //   fetchData();
+  // };
+  
   const handleClearSearch = () => {
     setSearchTerm('');
     setExperiences(initialExperiences);
@@ -118,7 +119,7 @@ const Page: React.FC = () => {
       setExperiences(initialExperiences); 
       return;
     }
-
+    
     const [min, max] = duration.split('-').map(Number);
     const filteredExperiences = initialExperiences.filter((experience) => {
       const experienceDuration = parseInt(experience.duration, 10);
@@ -127,7 +128,6 @@ const Page: React.FC = () => {
 
     setExperiences(filteredExperiences);
   };
-
 
   const options = experiences.map((experience) => ({
     value: experience.id,
@@ -142,37 +142,24 @@ const Page: React.FC = () => {
           <div className='absolute inset-0 flex flex-col items-center justify-center'>
             <h1 className='text-6xl font-bold'>Trust Our Experineces</h1>
             <p className='mt-10 text-2xl'>Tempor erat elitr rebum at clita diam amet diam et eos erat ipsum lorem sit</p>
-            <div className='mt-8 flex items-center justify-center relative'>
-  <Select
-    className='w-96'
-    options={options}
-    placeholder='Search...'
-    isSearchable
-    onChange={(selectedOption) => {
-      if (selectedOption) {
-        const selectedExperience = initialExperiences.find(
-          (experience) => experience.id === selectedOption.value
-        );
-
-        if (selectedExperience) {
-          setExperiences([selectedExperience]);
-        }
-      }
-    }}
-    onInputChange={handleChange}
-  />
-  {searchTerm && (
-    <FontAwesomeIcon
-      icon={faTimes}
-      className='absolute top-2  text-xl cursor-pointer text-gray-500  ml-'
-      onClick={handleClearSearch}
-    />
-  )}
-  <CommonBtn buttonText='Search' onClick={handleSearch} />
-</div>
-
-
-</div>
+            <div className='flex'>
+              <Select
+                className='w-96'
+                options={options}
+                placeholder='Search...'
+                isSearchable
+                onInputChange={handleChange}
+              />
+              <button onClick={handleSearch}>Search</button>
+            </div>
+            {searchTerm && (
+              <FontAwesomeIcon
+                icon={faTimes}
+                className='absolute top-2 pl-52 text-xl cursor-pointer text-gray-500'
+                onClick={handleClearSearch}
+              />
+            )}
+          </div>
 </div>
 
         <div className="flex gap-6 ">
