@@ -41,7 +41,7 @@ const Page: React.FC = () => {
         },
       });
 
-      // console.log(result, 'result');
+      console.log(result, 'result');
   
       if (result?.data?.experienceFilter) {
         setExperiences(result.data.experienceFilter);
@@ -53,7 +53,7 @@ const Page: React.FC = () => {
         console.error('Unknown error fetching data');
       }
     }
-  };
+  }
   
   useEffect(() => {
     fetchData();
@@ -62,6 +62,27 @@ const Page: React.FC = () => {
   useEffect(() => {
     setInitialExperiences(experiences);
   }, [experiences]);
+
+  const handleFilterChange = (duration: string) => {
+    setSelectedDuration(duration);
+    filterExperiencesByDuration(duration);
+  };
+
+  const filterExperiencesByDuration = (duration: string) => {
+    if (!duration) {
+      setExperiences(initialExperiences);
+      return;
+    }
+  
+    const [min, max] = duration.split('-').map(Number);
+    const filteredExperiences = initialExperiences.filter((experience) => {
+      const experienceDuration = parseInt(experience.duration, 10);
+      return experienceDuration >= min && experienceDuration <= max;
+    });
+  
+    setExperiences(filteredExperiences);
+  };
+  
 
   const [likedImages, setLikedImages] = useState<string[]>([]);
 
@@ -89,13 +110,8 @@ const Page: React.FC = () => {
   
   const handleSearch = () => {
     console.log('Button clicked!');
-        if (searchTerm.trim() !== '') {
-      fetchData();
-    } else {
-      setExperiences(initialExperiences);
-    }
+    fetchData();
   };
-  
   
   const handleClearSearch = () => {
     setSearchTerm('');
@@ -104,25 +120,25 @@ const Page: React.FC = () => {
   
 
 
-  const handleFilterChange = (duration: string) => {
-    setSelectedDuration(duration);
-    filterExperiencesByDuration(duration);
-  };
+  // const handleFilterChange = (duration: string) => {
+  //   setSelectedDuration(duration);
+  //   filterExperiencesByDuration(duration);
+  // };
 
-  const filterExperiencesByDuration = (duration: string) => {
-    if (!duration) {
-      setExperiences(initialExperiences); 
-      return;
-    }
+  // const filterExperiencesByDuration = (duration: string) => {
+  //   if (!duration) {
+  //     setExperiences(initialExperiences); 
+  //     return;
+  //   }
     
-    const [min, max] = duration.split('-').map(Number);
-    const filteredExperiences = initialExperiences.filter((experience) => {
-      const experienceDuration = parseInt(experience.duration, 10);
-      return experienceDuration >= min && experienceDuration <= max;
-    });
+  //   const [min, max] = duration.split('-').map(Number);
+  //   const filteredExperiences = initialExperiences.filter((experience) => {
+  //     const experienceDuration = parseInt(experience.duration, 10);
+  //     return experienceDuration >= min && experienceDuration <= max;
+  //   });
 
-    setExperiences(filteredExperiences);
-  };
+  //   setExperiences(filteredExperiences);
+  // };
 
   const options = experiences.map((experience) => ({
     value: experience.id,
