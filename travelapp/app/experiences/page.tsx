@@ -30,11 +30,9 @@ const Page: React.FC = () => {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [fetchExperienceFilter, { data }] = useLazyQuery(GetExperienceFilter);
   const [selectedDuration, setSelectedDuration] = useState<string>('');
-  const [shouldFetchData, setShouldFetchData] = useState<boolean>(true); // Set to true initially
+
 
   const fetchData = async () => {
-    if (!shouldFetchData) return; // Exit if shouldFetchData is false
-
     try {
       const result = await fetchExperienceFilter({
         variables: {
@@ -43,8 +41,8 @@ const Page: React.FC = () => {
         },
       });
 
-      console.log(result, 'result');
-
+      // console.log(result, 'result');
+  
       if (result?.data?.experienceFilter) {
         setExperiences(result.data.experienceFilter);
       }
@@ -54,22 +52,16 @@ const Page: React.FC = () => {
       } else {
         console.error('Unknown error fetching data');
       }
-    } finally {
-      if (shouldFetchData) {
-        setShouldFetchData(false); // Reset the flag after the initial fetch
-      }
     }
   };
-
+  
   useEffect(() => {
     fetchData();
-  }, [shouldFetchData]); // Fetch data whenever shouldFetchData changes
+  }, [searchTerm, selectedDuration]);
 
-  const handleSearch = () => {
-    console.log('Button clicked!');
-    setShouldFetchData(true); // Trigger search when button is clicked
-  };
-
+  useEffect(() => {
+    setInitialExperiences(experiences);
+  }, [experiences]);
 
   const [likedImages, setLikedImages] = useState<string[]>([]);
 
@@ -92,15 +84,18 @@ const Page: React.FC = () => {
   };
 
   const handleChange = (inputValue: string) => {
-    // console.log('Button  !');
-
     setSearchTerm(inputValue);
   };
   
-  // const handleSearch = () => {
-  //   console.log('Button clicked!');
-  //   fetchData();
-  // };
+  const handleSearch = () => {
+    console.log('Button clicked!');
+        if (searchTerm.trim() !== '') {
+      fetchData();
+    } else {
+      setExperiences(initialExperiences);
+    }
+  };
+  
   
   const handleClearSearch = () => {
     setSearchTerm('');
@@ -142,24 +137,29 @@ const Page: React.FC = () => {
           <div className='absolute inset-0 flex flex-col items-center justify-center'>
             <h1 className='text-6xl font-bold'>Trust Our Experineces</h1>
             <p className='mt-10 text-2xl'>Tempor erat elitr rebum at clita diam amet diam et eos erat ipsum lorem sit</p>
-            <div className='flex'>
-              <Select
-                className='w-96'
-                options={options}
-                placeholder='Search...'
-                isSearchable
-                onInputChange={handleChange}
-              />
-              <button onClick={handleSearch}>Search</button>
-            </div>
-            {searchTerm && (
-              <FontAwesomeIcon
-                icon={faTimes}
-                className='absolute top-2 pl-52 text-xl cursor-pointer text-gray-500'
-                onClick={handleClearSearch}
-              />
-            )}
-          </div>
+         <div className='flex'>
+
+       
+            <Select
+  className='w-96'
+  options={options}
+  placeholder='Search...'
+  isSearchable
+  onInputChange={handleChange}
+/>
+
+<button onClick={handleSearch}>Search</button>
+</div>
+{searchTerm && (
+  <FontAwesomeIcon
+    icon={faTimes}
+    className='absolute top-2 pl-52 text-xl cursor-pointer text-gray-500'
+    onClick={handleClearSearch}
+    />
+    )}
+{/* <button onClick={handleSearch}>Search</button> */}
+
+</div>
 </div>
 
         <div className="flex gap-6 ">
@@ -232,4 +232,4 @@ const Page: React.FC = () => {
   );
 };
 
-export default Page; 
+export default Page;
