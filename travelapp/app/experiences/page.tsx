@@ -105,7 +105,9 @@ const Page: React.FC = () => {
   };
 
   const handleChange = (inputValue: string) => {
-    setSearchTerm(inputValue);
+    // setSearchTerm(inputValue);
+        setSearchTerm(inputValue);
+
   };
   
   const handleSearch = () => {
