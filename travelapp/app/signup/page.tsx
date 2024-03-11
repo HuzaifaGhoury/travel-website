@@ -50,7 +50,7 @@ const AuthPage: React.FC = () => {
       } catch (error) {
         console.error('Authentication error:', error);
       } finally {
-        setLoading(false);
+        setLoading(false);  
       }
     },
   });

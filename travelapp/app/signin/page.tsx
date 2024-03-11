@@ -15,9 +15,10 @@ const SignInForm: React.FC = () => {
   const signInSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+    
   });
 
-  const formik = useFormik({
+const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
@@ -39,7 +40,7 @@ const SignInForm: React.FC = () => {
     },
   });
 
-  const togglePasswordVisibility = () => {
+const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
   };
 

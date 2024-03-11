@@ -1,13 +1,12 @@
 "use client"
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../layout';
 import { useLazyQuery } from '@apollo/client';
 import { GetExperienceFilter } from '../graphql/queries';
 import FilterSidebar from '../components/filtersidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart , faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faTimes } from '@fortawesome/free-solid-svg-icons';
 import StarRating from '../components/starrating'
-// import CommonBtn from '../components/commonbtn';
 import roadimg from '../../public/Images/roadimg.jpg'
 import Image from 'next/image';
 import Select from 'react-select';
@@ -21,10 +20,11 @@ interface Experience {
   averageRating: string;
   location: string;
   duration: string;
-  experienceDate: { price: number }[]; 
+  experienceDate: { price: number }[];
 }
-   
+
 const Page: React.FC = () => {
+
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [initialExperiences, setInitialExperiences] = useState<Experience[]>([]);
   const [experiences, setExperiences] = useState<Experience[]>([]);
@@ -41,8 +41,6 @@ const Page: React.FC = () => {
         },
       });
 
-      console.log(result, 'result');
-  
       if (result?.data?.experienceFilter) {
         setExperiences(result.data.experienceFilter);
       }
@@ -54,7 +52,7 @@ const Page: React.FC = () => {
       }
     }
   }
-  
+
   useEffect(() => {
     fetchData();
   }, [searchTerm, selectedDuration]);
@@ -73,16 +71,16 @@ const Page: React.FC = () => {
       setExperiences(initialExperiences);
       return;
     }
-  
+
     const [min, max] = duration.split('-').map(Number);
     const filteredExperiences = initialExperiences.filter((experience) => {
       const experienceDuration = parseInt(experience.duration, 10);
       return experienceDuration >= min && experienceDuration <= max;
     });
-  
+
     setExperiences(filteredExperiences);
   };
-  
+
 
   const [likedImages, setLikedImages] = useState<string[]>([]);
 
@@ -94,60 +92,40 @@ const Page: React.FC = () => {
     }
   };
 
-  const getMinimumPrice = (prices: { price: number }[]): number | string => {
+  const getMinimumPrice = (prices: { price: string | number }[]): number | string => {
     if (prices.length === 0) {
       return 'No price available';
     }
 
-    const minimumPrice = Math.min(...prices.map((date) => date.price));
+    const minimumPrice = Math.min(...prices.map((date) => parseFloat(String(date.price))));
+    const roundedMinimumPrice = parseFloat(minimumPrice.toFixed(2));
 
-    return minimumPrice;
+    return roundedMinimumPrice;
   };
+
+
+
 
   const handleChange = (inputValue: string) => {
-    // setSearchTerm(inputValue);
-        setSearchTerm(inputValue);
+    setSearchTerm(inputValue);
+  };
 
-  };
-  
-  const handleSearch = () => {
-    console.log('Button clicked!');
-    fetchData();
-  };
-  
+  // const handleSearch = () => {
+  //   setSearchTerm(searchTerm);
+  // };
+
   const handleClearSearch = () => {
     setSearchTerm('');
     setExperiences(initialExperiences);
   };
-  
 
-
-  // const handleFilterChange = (duration: string) => {
-  //   setSelectedDuration(duration);
-  //   filterExperiencesByDuration(duration);
-  // };
-
-  // const filterExperiencesByDuration = (duration: string) => {
-  //   if (!duration) {
-  //     setExperiences(initialExperiences); 
-  //     return;
-  //   }
-    
-  //   const [min, max] = duration.split('-').map(Number);
-  //   const filteredExperiences = initialExperiences.filter((experience) => {
-  //     const experienceDuration = parseInt(experience.duration, 10);
-  //     return experienceDuration >= min && experienceDuration <= max;
-  //   });
-
-  //   setExperiences(filteredExperiences);
-  // };
 
   const options = experiences.map((experience) => ({
     value: experience.id,
     label: experience.name,
   }));
 
-  return ( 
+  return (
     <Layout>
       <div>
         <div className='relative w-full h-screen'>
@@ -155,34 +133,31 @@ const Page: React.FC = () => {
           <div className='absolute inset-0 flex flex-col items-center justify-center'>
             <h1 className='text-6xl font-bold'>Trust Our Experineces</h1>
             <p className='mt-10 text-2xl'>Tempor erat elitr rebum at clita diam amet diam et eos erat ipsum lorem sit</p>
-         <div className='flex'>
+            <div className='flex'>
+              <Select
+                className='w-96'
+                options={options}
+                placeholder='Search...'
+                isSearchable
+                onInputChange={handleChange}
+              />
 
-       
-            <Select
-  className='w-96'
-  options={options}
-  placeholder='Search...'
-  isSearchable
-  onInputChange={handleChange}
-/>
+              {/* <button onClick={handleSearch}>Search</button> */}
+            </div>
+            {searchTerm && (
+              <FontAwesomeIcon
+                icon={faTimes}
+                className='absolute top-2 pl-52 text-xl cursor-pointer text-gray-500'
+                onClick={handleClearSearch}
+              />
+            )}
 
-<button onClick={handleSearch}>Search</button>
-</div>
-{searchTerm && (
-  <FontAwesomeIcon
-    icon={faTimes}
-    className='absolute top-2 pl-52 text-xl cursor-pointer text-gray-500'
-    onClick={handleClearSearch}
-    />
-    )}
-{/* <button onClick={handleSearch}>Search</button> */}
-
-</div>
-</div>
+          </div>
+        </div>
 
         <div className="flex gap-6 ">
           <div>
-          <FilterSidebar handleFilterChange={handleFilterChange} selectedDuration={selectedDuration} />
+            <FilterSidebar handleFilterChange={handleFilterChange} selectedDuration={selectedDuration} />
 
           </div>
           <div className=' flex gap-7 flex-col pb-3 pt-3'>
@@ -245,9 +220,9 @@ const Page: React.FC = () => {
           </div>
         </div>
       </div>
-     
-    </Layout>
-  );
-};
 
-export default Page;
+    </Layout>
+)
+}
+
+export default Page
