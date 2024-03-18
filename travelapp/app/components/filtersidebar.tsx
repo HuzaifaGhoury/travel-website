@@ -37,6 +37,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ handleFilterChange, selec
             <MenuItem value="21-31">21 - 31 Days</MenuItem>
           </Select>
        </div>
+       
+      
        </div> 
        </div>
 )}

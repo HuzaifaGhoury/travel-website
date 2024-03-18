@@ -6,11 +6,9 @@ import { GetExperienceFilter } from '../graphql/queries';
 import FilterSidebar from '../components/filtersidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faTimes } from '@fortawesome/free-solid-svg-icons';
-import StarRating from '../components/starrating'
-import roadimg from '../../public/Images/roadimg.jpg'
+import StarRating from '../components/starrating';
+import roadimg from '../../public/Images/roadimg.jpg';
 import Image from 'next/image';
-import Select from 'react-select';
-
 
 interface Experience {
   id: string;
@@ -21,16 +19,14 @@ interface Experience {
   location: string;
   duration: string;
   experienceDate: { price: number }[];
-}
+  }
 
 const Page: React.FC = () => {
-
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [initialExperiences, setInitialExperiences] = useState<Experience[]>([]);
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [fetchExperienceFilter, { data }] = useLazyQuery(GetExperienceFilter);
   const [selectedDuration, setSelectedDuration] = useState<string>('');
-
 
   const fetchData = async () => {
     try {
@@ -81,7 +77,6 @@ const Page: React.FC = () => {
     setExperiences(filteredExperiences);
   };
 
-
   const [likedImages, setLikedImages] = useState<string[]>([]);
 
   const handleLike = (experienceId: string) => {
@@ -103,27 +98,18 @@ const Page: React.FC = () => {
     return roundedMinimumPrice;
   };
 
-
-
-
-  const handleChange = (inputValue: string) => {
-    setSearchTerm(inputValue);
-  };
-
-  // const handleSearch = () => {
-  //   setSearchTerm(searchTerm);
-  // };
-
   const handleClearSearch = () => {
     setSearchTerm('');
     setExperiences(initialExperiences);
   };
 
+  const handleSelectExperience = (selectedExperience: string) => {
+    setSearchTerm(selectedExperience);
+  };
 
-  const options = experiences.map((experience) => ({
-    value: experience.id,
-    label: experience.name,
-  }));
+  const handleSearch = () => {
+    fetchData();
+  };
 
   return (
     <Layout>
@@ -131,34 +117,43 @@ const Page: React.FC = () => {
         <div className='relative w-full h-screen'>
           <Image src={roadimg} alt='bg-image' className='w-full h-full object-cover' />
           <div className='absolute inset-0 flex flex-col items-center justify-center'>
-            <h1 className='text-6xl font-bold'>Trust Our Experineces</h1>
+            <h1 className='text-6xl font-bold'>Trust Our Experiences</h1>
             <p className='mt-10 text-2xl'>Tempor erat elitr rebum at clita diam amet diam et eos erat ipsum lorem sit</p>
-            <div className='flex'>
-              <Select
-                className='w-96'
-                options={options}
+            <div className='flex relative'>
+              <input
+                className='w-96 h-11 pl-6'
                 placeholder='Search...'
-                isSearchable
-                onInputChange={handleChange}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.currentTarget.value)}
               />
-
-              {/* <button onClick={handleSearch}>Search</button> */}
+              {searchTerm && (
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  className='absolute right-2 top-3 text-xl cursor-pointer text-gray-500'
+                  onClick={handleClearSearch}
+                />
+              )}
             </div>
             {searchTerm && (
-              <FontAwesomeIcon
-                icon={faTimes}
-                className='absolute top-2 pl-52 text-xl cursor-pointer text-gray-500'
-                onClick={handleClearSearch}
-              />
+              <div className="absolute z-10 mt-2 bg-white rounded border border-gray-300 shadow-md w-96">
+                {experiences.map((experience: Experience) => (
+                  <div
+                    key={experience.id}
+                    onClick={() => handleSelectExperience(experience.name)}
+                    className="cursor-pointer hover:bg-gray-200 px-3 py-2"
+                  >
+                    {experience.name}
+                  </div>
+                ))}
+              </div>
             )}
-
+            {/* <button className="mt-2 bg-gray-700 text-white px-4 py-2 rounded" onClick={handleSearch}>Search</button> */}
           </div>
         </div>
 
         <div className="flex gap-6 ">
           <div>
             <FilterSidebar handleFilterChange={handleFilterChange} selectedDuration={selectedDuration} />
-
           </div>
           <div className=' flex gap-7 flex-col pb-3 pt-3'>
             {experiences.map((experience: Experience) => (
@@ -222,7 +217,7 @@ const Page: React.FC = () => {
       </div>
 
     </Layout>
-)
+  )
 }
 
-export default Page
+export default Page;

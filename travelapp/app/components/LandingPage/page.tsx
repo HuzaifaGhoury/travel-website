@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 
 
 const Page = () => {
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isModalOpen, setModalOpen] = useState(false);
   const router = useRouter();
@@ -22,24 +23,47 @@ const Page = () => {
     setModalOpen(false);
   };
 
-  const handleSignUp = () => {
-    router.push('/signup');
+  const handleSignUp = async () => {
+    setIsLoading(true); // Set loading state to true when button is clicked
+    // Perform any asynchronous actions here, like fetching data or making API calls
+    
+    // Simulate loading with setTimeout (remove this in your actual implementation)
+    setTimeout(() => {
+      // After the asynchronous action is complete, route to the signup page
+      router.push('/signup');
+      setIsLoading(false); // Reset loading state after routing is complete
+    }, 2000); 
   };
 
   return (
-    <div className="relative h-screen">
+    <div className="relative h-screen"> 
       <div className="absolute inset-0">
         <Image src={bgimgtwo} alt="background image" layout="fill" objectFit="cover" />
-        <div className='relative flex w-10/12 ml-20 justify-between sm:w-11/12'>
+        <div className='relative flex w-10/12  ml-14 justify-between sm:w-11/12'>
           <div className='flex'>
             <TravelExploreIcon className='mt-3 ml-4 text-5xl text-gray-700 text-opacity-75' />
             <h2 className='text-5xl mt-3 text-gray-700 text-opacity-75 font-mono'>Traveling</h2>
           </div>
           <div>
-            <button className='bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mt-4' onClick={handleSignUp}>
-              Sign Up
-            </button>
-          </div>
+          <button 
+  className={`bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mt-4 mr-14 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+  onClick={handleSignUp}
+  disabled={isLoading} // Disable the button when loading
+>
+  {isLoading ? (
+    <>
+    <div className='flex gap-2'>
+ <span>Signing Up</span>
+      <div className="spinner border-t-4 border-b-4 border-gray-200 rounded-full h-6 w-6 mx-auto"></div>
+      </div>
+    </>
+  ) : (
+    'Sign Up'
+  )}
+</button>
+
+
+      </div>
         </div>
         <div className=' align-middle flex justify-center mt-36'>
           <div className='relative'>
